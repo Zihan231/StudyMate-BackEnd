@@ -121,6 +121,23 @@ async function run() {
       const result = await networkCollection.updateOne(filter, Update);
       res.send(result);
     });
+      
+    // 🔍 Search partner by subject
+    app.get("/partners", async (req, res) => {
+      try {
+        const search = req.query.search || "";
+        const query = search
+          ? { subject: { $regex: search, $options: "i" } }
+          : {};
+
+        const result = await partnersCollection.find(query).toArray();
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Server Error", error });
+      }
+    });
+      
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
