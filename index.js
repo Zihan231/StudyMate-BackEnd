@@ -121,7 +121,7 @@ async function run() {
       const result = await networkCollection.updateOne(filter, Update);
       res.send(result);
     });
-      
+
     // 🔍 Search partner by subject
     app.get("/partners", async (req, res) => {
       try {
@@ -137,7 +137,9 @@ async function run() {
         res.status(500).send({ message: "Server Error", error });
       }
     });
-      
+
+    // GET /partners?sort=asc|desc
+    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
