@@ -73,7 +73,7 @@ async function run() {
     });
 
     //   Sell all connected Partners
-    app.get("/partner/:email", async (req, res) => {
+    app.get("/partner/connected/:email", async (req, res) => {
       const email = req.params.email;
       const filter = { email: email };
       const data = networkCollection.find(filter);
@@ -85,7 +85,10 @@ async function run() {
       const data = req.body;
       const Email = data.email;
       const partnerID = data.partner_id;
-      const query = { partner_id: partnerID };
+      const query = {
+        partner_id: partnerID,
+        email: Email,
+      };
       const isExist = await networkCollection.findOne(query);
       if (isExist) {
         res.send({ message: "Already exist" });
