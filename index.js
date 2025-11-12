@@ -48,6 +48,7 @@ async function run() {
     app.post("/create/partner", async (req, res) => {
       try {
         const data = req.body;
+        // console.log(req.headers.authorization);
         // 🗃️ Insert new partner data into partnersCollection
         const result = await partnersCollection.insertOne(data);
         res.send({ message: "Partner created successfully", result });
@@ -62,6 +63,37 @@ async function run() {
       const cursor = partnersCollection.find();
       const result = await cursor.toArray();
       res.send(result);
+    });
+    // Get recent Partners
+    app.get("/partners/recent", async (req, res) => {
+      try {
+        const result = await partnersCollection
+          .find()
+          .sort({ _id: -1 }) // newest first
+          .limit(5)
+          .toArray();
+
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Server Error", error });
+      }
+    });
+
+    // top Partners
+    app.get("/topPartners", async (req, res) => {
+      try {
+        const result = await partnersCollection
+          .find()
+          .sort({ rating: -1}) // newest first
+          .limit(5)
+          .toArray();
+
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Server Error", error });
+      }
     });
 
     // See by partners ID
@@ -139,7 +171,6 @@ async function run() {
     });
 
     // GET /partners?sort=asc|desc
-    
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
