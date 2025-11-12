@@ -69,8 +69,8 @@ async function run() {
       try {
         const result = await partnersCollection
           .find()
-          .sort({ _id: -1 }) // newest first
-          .limit(5)
+          .sort({ _id: -1 })
+          .limit(6)
           .toArray();
 
         res.send(result);
@@ -85,7 +85,7 @@ async function run() {
       try {
         const result = await partnersCollection
           .find()
-          .sort({ rating: -1}) // newest first
+          .sort({ rating: -1 })
           .limit(5)
           .toArray();
 
@@ -163,6 +163,22 @@ async function run() {
           : {};
 
         const result = await partnersCollection.find(query).toArray();
+        res.send(result);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Server Error", error });
+      }
+    });
+
+    // Inc Partner Count
+    app.patch("/Inc/:id", async (req, res) => {
+      const partnerID = req.params.id;
+      try {
+        const filter = { _id: new ObjectId(partnerID) };
+        const Update = {
+          $inc: { partnerCount: 1 },
+        };
+        const result = await partnersCollection.updateOne(filter, Update);
         res.send(result);
       } catch (error) {
         console.error(error);
