@@ -70,7 +70,7 @@ async function run() {
         const result = await partnersCollection
           .find()
           .sort({ _id: -1 })
-          .limit(6)
+          .limit(5)
           .toArray();
 
         res.send(result);
@@ -86,7 +86,7 @@ async function run() {
         const result = await partnersCollection
           .find()
           .sort({ rating: -1 })
-          .limit(5)
+          .limit(6)
           .toArray();
 
         res.send(result);
